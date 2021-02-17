@@ -60,6 +60,12 @@ const routes = [
   //   ]
   // }
 
+  // 404
+  {
+    path: '*',
+    component: () => import(/* webpackChunkName: "home" */ '../views/404.vue')
+  }
+
 
 ]
 

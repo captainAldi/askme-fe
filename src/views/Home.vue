@@ -65,7 +65,7 @@
 
 <script>
 import axios from 'axios'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Home',
@@ -76,7 +76,7 @@ export default {
   },
 
   mounted() {
-
+    
   },
 
   data() {
@@ -95,7 +95,9 @@ export default {
   },
 
   computed: {
-
+    ...mapGetters({
+      event_detail: 'askme/dataEventDetail',
+    }),
   },
 
   methods: {
@@ -120,14 +122,20 @@ export default {
             status : true,
           })
 
-          this.setClearEvent()
-
           let formData = new FormData()
           formData.append('event_code', this.event_code)
 
           const response = await axios.post(`${this.api_url}/events/enter`, formData)
 
           await this.setEventDetail(response.data.data)
+
+          if(Object.keys(this.event_detail).length !== 0) {
+            console.log(this.event_code)
+            console.log(this.event_detail.code)
+            if(this.event_detail.code != this.event_code) {
+              this.setClearEvent()
+            }
+          }
 
           this.setDialog({
             status : false,
