@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'RunEvent',
   components: {
@@ -71,6 +73,7 @@ export default {
   mounted() {
     this.getTahun()
     this.getThemeDataLS()
+    this.checkParams()
   },
 
   data() {
@@ -84,6 +87,9 @@ export default {
   },
 
   computed: {
+    ...mapGetters({
+      event_detail: 'askme/dataEventDetail',
+    }),
 
     goDark: {
       get() {
@@ -99,6 +105,13 @@ export default {
   },
 
   methods: {
+    checkParams() {
+      const paramUrl = this.$route.params.eventCode
+      
+      if(paramUrl != this.event_detail.code) {
+        this.$router.push('/')
+      }
+    },
 
     getTahun() {
       this.tahun = new Date().getFullYear()
