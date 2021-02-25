@@ -66,6 +66,10 @@
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
       </section>
+
+      <section class="d-flex flex-row">
+        <p>Jumlah User: <strong>{{ users }}</strong></p>
+      </section>
       
       <section v-if="statusLoadingQuestions">
         <v-skeleton-loader
@@ -154,13 +158,15 @@ export default {
       form: {
         judul: '',
         penanya: ''
-      }
+      },
+      users: null
 
     }
   },
 
   mounted() {
-    this.getQuestions()
+    this.getQuestions(),
+    this.listenForChange()
     //this.intervalGetQuestions()
   },
 
@@ -176,6 +182,44 @@ export default {
       setAlert  : 'alert/set',
       setLikedQuestions: 'askme/doSetLikedQuestions'
     }),
+
+    listenForChange() {
+
+      window.io = require('socket.io-client')
+
+      let socket = window.io.connect('http://localhost:3000');
+
+      socket.on('userCount', (data) => {
+        this.users = data.userCount
+      })
+      socket.on("QuestionChannel:App\\Events\\QuestionCreatedEvent", (data) => {
+        this.data_pertanyaan.push(data.question)
+      
+        if(this.sort_by == 'like') {
+          this.data_pertanyaan.sort( (a,b) => (a.like > b.like) ? -1 : 1 )
+        } else  {
+          this.data_pertanyaan.sort( (a,b) => (a.created_at > b.created_at) ? -1 : 1 )
+        }
+      })
+      socket.on("QuestionChannel:App\\Events\\QuestionLikedEvent", (data) => {
+        let dataBaru = data.question
+
+        this.data_pertanyaan = this.data_pertanyaan.filter(item => item.id !== dataBaru.id)
+        this.data_pertanyaan.push(dataBaru)
+
+        if(this.sort_by == 'like') {
+          this.data_pertanyaan.sort( (a,b) => (a.like > b.like) ? -1 : 1 )
+        } else  {
+          this.data_pertanyaan.sort( (a,b) => (a.created_at > b.created_at) ? -1 : 1 )
+        }
+
+      })
+
+      //  window.Echo.channel('QuestionChannel')
+      //   .listen('.App\\Events\\QuestionEvent', (data) => {
+      //       console.log(data)
+      //   });
+    },
 
     async getQuestions() {
       try {
@@ -193,6 +237,7 @@ export default {
         this.data_pertanyaan = response.data.data
 
         this.statusLoadingQuestions = false
+
 
       } catch (error) {
         this.statusLoadingQuestions = false
@@ -217,8 +262,6 @@ export default {
         await axios.post(`${this.api_url}/questions/like/${id}`)
 
         this.setLikedQuestions(id)
-
-        await this.getQuestions()
 
       } catch (error) {
         this.setAlert({
@@ -246,8 +289,6 @@ export default {
           formData.append('penanya', this.form.penanya)
 
           await axios.post(`${this.api_url}/questions/create`, formData)
-
-          await this.getQuestions()
 
           this.setAlert({
             status : true,

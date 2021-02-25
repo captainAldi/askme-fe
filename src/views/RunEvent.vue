@@ -71,8 +71,8 @@ export default {
   },
 
   mounted() {
-    this.getTahun()
-    this.getThemeDataLS()
+    this.getTahun(),
+    this.getThemeDataLS(),
     this.checkParams()
   },
 
