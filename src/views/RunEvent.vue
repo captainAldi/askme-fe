@@ -5,7 +5,7 @@
       :color="$vuetify.theme.dark ? 'grey-darken4' : 'primary'"
       dark
     >
-      <v-toolbar-title>Ask Me - Alterra</v-toolbar-title>
+      <v-toolbar-title>Ask Me</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -36,7 +36,7 @@
       :color="$vuetify.theme.dark ? 'grey-darken4' : 'primary'"
       app
     >
-      <span class="white--text mr-2">Infra Team</span>
+      <span class="white--text mr-2">Renaldi</span>
       <v-divider color="white" vertical></v-divider>
       <span class="white--text ml-2">&copy; {{ tahun }}</span>
 

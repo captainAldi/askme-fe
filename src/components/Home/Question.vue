@@ -139,6 +139,7 @@ export default {
   data() {
     return {
       api_url: process.env.VUE_APP_API_ENDPOINT,
+      socket_url: process.env.VUE_APP_SOCKET_ENDPOINT,
 
       validAddPertanyaanForm: false,
       formRules: {
@@ -187,7 +188,7 @@ export default {
 
       window.io = require('socket.io-client')
 
-      let socket = window.io.connect('http://localhost:3000');
+      let socket = window.io.connect(this.socket_url);
 
       socket.on('userCount', (data) => {
         this.users = data.userCount

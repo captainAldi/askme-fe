@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '../store/index'
 
-// import AdminBase from '../views/Admin/Base.vue'
+import AdminBase from '../views/admin/Base.vue'
 
 import Home from '../views/Home.vue'
 import RunEvent from '../views/RunEvent.vue'
@@ -29,36 +29,44 @@ const routes = [
     
   },
 
-  // // Auth
-  // {
-  //   path: '/auth/login',
-  //   name: 'login',
-  //   component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
-  // },
+  // Auth
+  {
+    path: '/auth/login',
+    name: 'login',
+    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
+  },
 
-  // // Base
-  // {
-  //   path: '/admin',
-  //   name: 'Admin',
-  //   component: AdminBase,
-  //   meta: {
-  //     auth: true,
-  //   },
-  //   children: [
-  //     {
-  //       path: 'home',
-  //       component: () => import(/* webpackChunkName: "home" */ '../views/Admin/Dashboard.vue')
-  //     },
-  //     {
-  //       path: 'event',
-  //       component: () => import(/* webpackChunkName: "event" */ '../views/Admin/Event.vue')
-  //     },
-  //     {
-  //       path: 'question',
-  //       component: () => import(/* webpackChunkName: "event-question" */ '../views/Admin/Question.vue')
-  //     },
-  //   ]
-  // }
+  // Base
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: AdminBase,
+    meta: {
+      auth: true,
+    },
+    children: [
+      {
+        path: 'home',
+        component: () => import(/* webpackChunkName: "home" */ '../views/admin/Dashboard.vue')
+      },
+      {
+        path: 'events',
+        component: () => import(/* webpackChunkName: "event" */ '../views/admin/events/List.vue')
+      },
+      {
+        path: 'event/create',
+        component: () => import(/* webpackChunkName: "event" */ '../views/admin/events/Add.vue')
+      },
+      {
+        path: 'event/edit/:code',
+        component: () => import(/* webpackChunkName: "event" */ '../views/admin/events/Edit.vue')
+      },
+      {
+        path: 'questions',
+        component: () => import(/* webpackChunkName: "question" */ '../views/admin/Questions.vue')
+      },
+    ]
+  },
 
   // 404
   {
